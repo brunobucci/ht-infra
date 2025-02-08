@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  ht-fila:
+    build: ../ht-fila
+    container_name: ht-fila
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    restart: unless-stopped
+
+  ht-mongo-usuario:
+    build: ../ht-mongo-usuario
+    container_name: ht-mongo-usuario
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data-mongo-usuario:/data/db
+    restart: unless-stopped
+    depends_on:
+      - ht-fila
+
+  ht-mongo-video:
+    build: ../ht-mongo-video
+    container_name: ht-mongo-video
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./data-mongo-video:/data/db
+    restart: unless-stopped
+    depends_on:
+      - ht-fila
+
+  ht-autenticador:
+    build: ../ht-autenticador
+    container_name: ht-autenticador
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: mongodb://ht-mongo-usuario:27017/usuarios
+    restart: unless-stopped
+    depends_on:
+      - ht-mongo-usuario
+      - ht-mongo-video
+      - ht-fila
+
+  ht-notificador:
+    build: ../ht-notificador
+    container_name: ht-notificador
+    restart: unless-stopped
+    depends_on:
+      - ht-autenticador
+
+  ht-video-api:
+    build: ../ht-video-api
+    container_name: ht-video-api
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    depends_on:
+      - ht-autenticador
+
+  ht-video-extrator:
+    build: ../ht-video-extrator
+    container_name: ht-video-extrator
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+    depends_on:
+      - ht-autenticador
+
+  ht-video-compactador:
+    build: ../ht-video-compactador
+    container_name: ht-video-compactador
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+    depends_on:
+      - ht-autenticador

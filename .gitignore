@@ -1,0 +1,17 @@
+# Ignorar arquivos de configuração sensíveis
+.env
+
+# Ignorar dados persistentes dos containers
+data-rabbitmq/
+
+# Ignorar outros arquivos gerados pelo Docker
+*.log
+docker-compose.override.yml
+
+# Ignorar diretórios ou arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Ignorar arquivos gerados por IDEs
+.idea/
+.vscode/

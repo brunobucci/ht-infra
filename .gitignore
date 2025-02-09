@@ -3,6 +3,8 @@
 
 # Ignorar dados persistentes dos containers
 data-rabbitmq/
+data-mongo-usuario/
+data-mongo-video/
 
 # Ignorar outros arquivos gerados pelo Docker
 *.log

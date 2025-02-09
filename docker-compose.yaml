@@ -47,55 +47,50 @@ services:
     depends_on:
       - ht-fila
 
-#  ht-autenticador:
-#    build: ../ht-autenticador
-#    container_name: ht-autenticador
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      SPRING_DATASOURCE_URL: mongodb://ht-mongo-usuario:27017/usuarios
-#    restart: unless-stopped
-#    depends_on:
-#      - ht-mongo-usuario
-#      - ht-mongo-video
-#      - ht-fila
+  ht-autenticador:
+    build: ../ht-autenticador
+    container_name: ht-autenticador
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: mongodb://ht-mongo-usuario:27017/usuarios
+    restart: unless-stopped
+    depends_on:
+      - ht-mongo-usuario
 
   #ht-notificador:
   #  build: ../ht-notificador
   #  container_name: ht-notificador
+  #  ports:
+  #    - "8084:8084"
   #  restart: unless-stopped
   #  depends_on:
   #    - ht-autenticador
 
-#  ht-video-api:
-#    build: ../ht-video-api
-#    container_name: ht-video-api
-#    ports:
-#      - "8081:8081"
-#    restart: unless-stopped
-#    depends_on:
-#      - ht-mongo-usuario
-#      - ht-mongo-video
-#      - ht-fila
+  ht-video-api:
+    build: ../ht-video-api
+    container_name: ht-video-api
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    depends_on:
+      - ht-mongo-video
+      - ht-fila
 
-#  ht-video-extrator:
-#    build: ../ht-video-extrator
-#    container_name: ht-video-extrator
-#    ports:
-#      - "8082:8082"
-#    restart: unless-stopped
-#    depends_on:
-#      - ht-mongo-usuario
-#      - ht-mongo-video
-#      - ht-fila
+  ht-video-extrator:
+    build: ../ht-video-extrator
+    container_name: ht-video-extrator
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+    depends_on:
+      - ht-fila
 
-#  ht-video-compactador:
-#    build: ../ht-video-compactador
-#    container_name: ht-video-compactador
-#    ports:
-#      - "8083:8083"
-#    restart: unless-stopped
-#    depends_on:
-#      - ht-mongo-usuario
-#      - ht-mongo-video
-#      - ht-fila
+  ht-video-compactador:
+    build: ../ht-video-compactador
+    container_name: ht-video-compactador
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+    depends_on:
+      - ht-fila

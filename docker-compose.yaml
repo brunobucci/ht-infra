@@ -7,6 +7,9 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    volumes:
+      - ./data-rabbitmq:/var/lib/rabbitmq  # Volume para persistir os dados
+      - ./rabbitmq-logs:/var/log/rabbitmq  # Volume opcional para logs
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ht-video-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ht-video-api
+  template:
+    metadata:
+      labels:
+        app: ht-video-api
+    spec:
+      containers:
+      - name: ht-video-api
+        image: brunobucci/ht-video-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "800m"
+            memory: "512Mi"
+        env:
+        - name: MONGO_HOST
+          value: "ht-mongo-video"
+        - name: RABBITMQ_HOST
+          value: "ht-fila"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ht-video-api
+spec:
+  selector:
+    app: ht-video-api
+  ports:
+    - protocol: TCP
+      port: 8081       # Porta interna do serviço no cluster
+      targetPort: 8081  # Porta do container
+      nodePort: 30081   # Porta fixa acessível externamente
+  type: NodePort        # Permite acesso externo via IP do cluster
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ht-video-api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ht-video-api
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 90

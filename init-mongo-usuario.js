@@ -8,9 +8,10 @@ db.createCollection("usuario");
 print("Collection usuario criada!");
 
 db.usuario.insertOne({
-    nome: "Usuário Teste",
-    email: "teste@email.com",
-    idade: 30
+    nomeCompleto: "Marcelo Quevedo",
+    username: "marceloquevedo",
+    password: "$2a$10$yXL7MuYdV6bp8aAQ33U7feew4LUrFdIZ0Topb7xu0pu5jUq6FkhKW",
+    _class: "com.br.fiap.postech.ht_autenticador.entity.UsuarioEntity"
 });
 print("Documento inicial inserido na collection usuario.");
 

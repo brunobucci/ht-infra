@@ -58,14 +58,14 @@ services:
     depends_on:
       - ht-mongo-usuario
 
-  #ht-notificador:
-  #  build: ../ht-notificador
-  #  container_name: ht-notificador
-  #  ports:
-  #    - "8084:8084"
-  #  restart: unless-stopped
-  #  depends_on:
-  #    - ht-autenticador
+  ht-notificador:
+    build: ../ht-notificador
+    container_name: ht-notificador
+    ports:
+      - "8084:8084"
+    restart: unless-stopped
+    depends_on:
+      - ht-fila
 
   ht-video-api:
     build: ../ht-video-api

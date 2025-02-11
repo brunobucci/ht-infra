@@ -1,0 +1,46 @@
+{
+    "rabbit_version": "3.12.0",
+    "users": [
+      {
+        "name": "guest",
+        "password": "guest",
+        "tags": "administrator"
+      }
+    ],
+    "vhosts": [
+      {
+        "name": "/"
+      }
+    ],
+    "permissions": [
+      {
+        "user": "guest",
+        "vhost": "/",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      }
+    ],
+    "queues": [
+      {
+        "name": "videos_processados",
+        "vhost": "/",
+        "durable": true
+      },
+      {
+        "name": "videos_extraidos",
+        "vhost": "/",
+        "durable": true
+      },
+      {
+        "name": "videos_pendentes",
+        "vhost": "/",
+        "durable": true
+      },
+      {
+        "name": "videos_com_notificacao",
+        "vhost": "/",
+        "durable": true
+      }
+    ]
+  }

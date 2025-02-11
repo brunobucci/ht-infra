@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ht-video-compactador
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ht-video-compactador
+  template:
+    metadata:
+      labels:
+        app: ht-video-compactador
+    spec:
+      containers:
+      - name: ht-video-compactador
+        image: brunobucci/ht-video-compactador:latest  # Ajuste para sua imagem no Docker Hub
+        ports:
+        - containerPort: 8083
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "800m"
+            memory: "512Mi"
+        env:
+        - name: RABBITMQ_HOST
+          value: "ht-fila"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ht-video-compactador
+spec:
+  selector:
+    app: ht-video-compactador
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083
+      nodePort: 30083  # Porta fixa para acesso externo
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ht-video-compactador-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ht-video-compactador
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50

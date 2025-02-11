@@ -40,7 +40,7 @@ spec:
       port: 8084
       targetPort: 8084
       nodePort: 30084  # Porta fixa para acesso externo
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -59,4 +59,4 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 90
+        averageUtilization: 50

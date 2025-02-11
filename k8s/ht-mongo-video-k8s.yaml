@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-video-pvc
+spec:
+  storageClassName: ""
+  volumeName: mongo-video-pv
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ht-mongo-video
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ht-mongo-video
+  template:
+    metadata:
+      labels:
+        app: ht-mongo-video
+    spec:
+      containers:
+      - name: ht-mongo-video
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-video-storage
+          mountPath: /data/db
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d/init-mongo-video.js
+          subPath: init-mongo-video.js
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: "soat7grupo5"
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: "Hc9YCOqLHPsKvf7e"
+      volumes:
+      - name: mongo-video-storage
+        persistentVolumeClaim:
+          claimName: mongo-video-pvc
+      - name: init-script
+        configMap:
+          name: mongo-init-script
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ht-mongo-video
+spec:
+  type: NodePort
+  selector:
+    app: ht-mongo-video
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+      nodePort: 30019  # Porta externa fixa para acesso local
+

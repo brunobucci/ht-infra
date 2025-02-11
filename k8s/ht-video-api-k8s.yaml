@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: ht-video-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ht-video-api
@@ -27,9 +27,9 @@ spec:
             memory: "512Mi"
         env:
         - name: MONGO_HOST
-          value: "ht-mongo-video"
+          value: "host.docker.internal"
         - name: RABBITMQ_HOST
-          value: "ht-fila"
+          value: "host.docker.internal"
 ---
 apiVersion: v1
 kind: Service
@@ -43,7 +43,7 @@ spec:
       port: 8081       # Porta interna do serviço no cluster
       targetPort: 8081  # Porta do container
       nodePort: 30081   # Porta fixa acessível externamente
-  type: NodePort        # Permite acesso externo via IP do cluster
+  type: LoadBalancer        # Permite acesso externo via IP do cluster
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -54,7 +54,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: ht-video-api
-  minReplicas: 1
+  minReplicas: 2
   maxReplicas: 5
   metrics:
   - type: Resource
@@ -62,4 +62,4 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 90
+        averageUtilization: 50

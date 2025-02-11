@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: ht-autenticador
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ht-autenticador
@@ -40,7 +40,7 @@ spec:
       port: 8080
       targetPort: 8080
       nodePort: 30080  # Porta fixa para acesso externo
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -51,7 +51,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: ht-autenticador
-  minReplicas: 1
+  minReplicas: 2
   maxReplicas: 5
   metrics:
   - type: Resource
@@ -59,4 +59,4 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 90
+        averageUtilization: 50

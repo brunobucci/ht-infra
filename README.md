@@ -2,8 +2,6 @@
 
 ### Repositório: Infra 
 
-Link do vídeo <a href="https://www.youtube.com/watch?v=YplkjITVdOM" target="_blank">aqui</a> <br>
-
 ### Repositórios do projeto:
 <b>Infra Kubernets:</b> https://github.com/brunobucci/ht-infra<br>
 <b>RabbitMQ Fila:</b> https://github.com/brunobucci/ht-fila<br>

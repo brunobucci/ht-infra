@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: ht-notificador
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ht-notificador
@@ -51,7 +51,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: ht-notificador
-  minReplicas: 1
+  minReplicas: 2
   maxReplicas: 5
   metrics:
   - type: Resource

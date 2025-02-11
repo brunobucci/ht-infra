@@ -1,6 +1,6 @@
 # SOAT7GRUPO5 - Hackaton
 
-### Repositório: Infra com Terraform | Kubernetes | AWS (EKS)
+### Repositório: Infra 
 
 Link do vídeo <a href="https://www.youtube.com/watch?v=YplkjITVdOM" target="_blank">aqui</a> <br>
 
